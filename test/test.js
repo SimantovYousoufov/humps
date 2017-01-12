@@ -97,6 +97,25 @@ describe('humps', function() {
       }
     };
 
+    this.complexBufferObject = {
+        attr_one: 'foo',
+        buffer_attr: new Buffer('some-string', 'utf-8'),
+        attr_two: {
+          nested_attr1: 'bar'
+        },
+        attr_three: {
+          nested_attr2: {
+            nested_attr3: [{
+              nested_in_array1: 'baz'
+            }, {
+              nested_in_array2: 'hello'
+            }, {
+              nested_in_array3: ['world', 'boo']
+            }]
+          }
+        }
+    }
+
     this.complexCustomObj = {
       'attr-one': 'foo',
       'attr-two': {
@@ -139,6 +158,10 @@ describe('humps', function() {
         aDate: date
       };
       assert.deepEqual(humps.camelizeKeys(_object), convertedObject);
+    });
+
+    it('does not attempt to process buffers', function() {
+        assert.deepEqual(humps.decamelizeKeys(this.complexBufferObject), this.complexBufferObject);
     });
 
     it('converts keys within arrays of objects', function() {
